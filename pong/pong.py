@@ -1,5 +1,5 @@
 import pygame as pg
-from pong.hud import HeadsUpDisplay as hud
+from hud import HeadsUpDisplay as hud
 from pong.ball import Ball
 from pong.paddle import Paddle
 from pong.cpu import CPU
