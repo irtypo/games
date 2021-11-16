@@ -1,2 +1,2 @@
-## game
+# available game
 ### pong
