@@ -28,8 +28,6 @@ class GameChoice:
     def draw(self):
         pg.draw.rect(self.surface, self.color, self.rect)
 
-
     def count(self):
-        # print(self.index)
         global index
         index += 1

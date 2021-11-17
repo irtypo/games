@@ -1,47 +1,35 @@
 import pygame as pg
 from pong.scoreboard import ScoreBoard as hud
 from menu.choice import GameChoice
-# from menu.hud import hud
+
 gameBoxWidth = 200
 gameBoxHeight = 200
 gameBoxPadding = 75
 AVAILABLE_GAMES = ['pong', 'breaker', '3', '4']
 
 class Menu:
-    def __init__(self, surface, win_w, win_h, md):
+    def __init__(self, surface, win_w, win_h, hud_h):
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = win_h
-        self.hudHeight = self.windowHeight * .2
-        self.playHeight = self.windowHeight - (self.windowHeight * .2)
-        self.gameOver = False
-        self.hud = hud(self.surface, self.windowWidth, self.windowHeight, 'pong')
-        self.metaData = md
-        self.selectedGame = md.game
+        self.hudHeight = self.windowHeight * hud_h
+        self.playHeight = self.windowHeight - (self.windowHeight * hud_h)
         self.gamesAvailable = self.wheresTheMelee()
         
-    def play(self):
-        while not self.gameOver:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.gameOver = True
-                elif event.type == pg.MOUSEBUTTONUP:
-                    for g in self.gamesAvailable:
-                        if g.rect.collidepoint(event.pos[0],event.pos[1]):
-                            self.selectedGame = g.name
-                            print(self.selectedGame)
+    def draw(self):
+        for g in self.gamesAvailable:
+            g.draw()
 
-        # draw background
-            pg.display.update()
-            self.surface.fill((0,0,0))
-        # draw game
-            
+    def click(self, event):
+        self.clickX = event.pos[0]
+        self.clickY = event.pos[1]
 
-            self.hud.draw()
-            for games in self.gamesAvailable:
-                games.draw()
-
-        pg.quit()
+        if event != 0:
+            for g in self.gamesAvailable:
+                if g.rect.collidepoint(self.clickX,self.clickY):
+                    self.selectedGame = g.name
+                    print(self.selectedGame)
+                    return self.selectedGame
 
 
 
@@ -51,7 +39,6 @@ class Menu:
         for gameName in AVAILABLE_GAMES:
             res.append(GameChoice(self.surface, self.windowWidth, self.windowHeight, gameName, num))
 
-        print(res[0])
         return res
 
 
