@@ -28,7 +28,6 @@ class Menu:
             for g in self.gamesAvailable:
                 if g.rect.collidepoint(self.clickX,self.clickY):
                     self.selectedGame = g.name
-                    print(self.selectedGame)
                     return self.selectedGame
 
 

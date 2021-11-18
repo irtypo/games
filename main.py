@@ -11,55 +11,56 @@ def main():
     WINDOW_WIDTH = 1280
     WINDOW_HEIGHT = 720 + (720 * .2)
     WINDOW_ICON = pg.image.load('common\src\\brain.png')
-    AVAILABLE_GAMES = ['menu', 'pong', 'breaker', '3', '4']
+    AVAILABLE_GAMES = ['menu', 'pong', 'breaker', 'drive', '4']
 
     pg.init()
-    clickEvent = 0
     metaData = MetaData()
     metaData.gameName = AVAILABLE_GAMES[0]
-    displayText = None  
+    metaData.displayText = metaData.gameName
+    mouseY = 10
 
     surface = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
     pg.display.set_caption("ping")
     pg.display.set_icon(WINDOW_ICON)
     hud = HUD(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
     menu = Menu(surface, WINDOW_WIDTH, WINDOW_HEIGHT, hud.maxHeight)
-    pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight)
-    gameOver = False
 
-    while not gameOver:
+    while not metaData.gameOver:
+
+        # events
         for event in pg.event.get():
+            # close window
             if event.type == pg.QUIT:
-                gameOver = True
-            elif event.type == pg.MOUSEBUTTONUP:
-                if metaData.gameName == 'menu' and menu.click(event) != None:
+                metaData.gameOver = True
+            # ctrl + c
+            elif event.type == pg.KEYDOWN:
+                if event.mod == 4160 and event.key == 99:
+                    metaData.gameOver = True
+            
+            elif metaData.gameName == 'menu':
+                if event.type == pg.MOUSEBUTTONUP and menu.click(event) != None:
                     metaData.gameName = menu.click(event)
-            # elif event.type == pg.MOUSEMOTION:
-                # if metaData.gameName == 'pong':
-                    # pong.players[0].y = event.pos[1]
-                # self.players[0].y = event.pos[1]
+            elif metaData.gameName == 'pong':
+                if event.type == pg.MOUSEMOTION:
+                    if event.pos[1] != None:
+                        mouseY = event.pos[1]
 
-
-
+        # drawing
         pg.display.update()
         surface.fill((0,0,0))
-        
-        hud.draw(metaData)
-
         if metaData.gameName == 'menu':
             menu.draw()
-        else:
-            displayText = metaData.gameName
-            # print(metaData.gameName)
+        elif metaData.gameName == 'pong':
+            pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight)
+            pong.draw(mouseY)
+        elif metaData.gameName == 'breaker':
+            pass
+        elif metaData.gameName == 'drive':
+            pass
 
-
-        # if metaData.gameName == 'pong':
-        #     pong.draw()
-        # if metaData.gameName == 'breaker':
-        #     breaker.draw()
-
-        
+        hud.draw()
     pg.quit()
+
 
 if __name__=="__main__":
     main()

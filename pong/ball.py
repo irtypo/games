@@ -8,11 +8,10 @@ class Ball:
         self.x = x
         self.y = y
         self.radius = radias
-        self.direction = 6
         self.directionX = 1
         self.directionY = 1
-        self.speed = 1
-        pg.draw.circle(self.surface, self.color, (self.x, self.y), self.radius)
+        self.speed = .0001
+        # pg.draw.circle(self.surface, self.color, (self.x, self.y), self.radius)
     
     def draw(self):
         if self.directionX > 0:
