@@ -4,6 +4,7 @@ from pong.pong import Pong
 from menu.menu import Menu
 from metadata import MetaData
 from hud import HeadsUpDisplay as HUD
+from pong.scoreboard import ScoreBoard
 
 
 
@@ -23,8 +24,9 @@ def main():
     pg.display.set_caption("ping")
     pg.display.set_icon(WINDOW_ICON)
     hud = HUD(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
+    sb = ScoreBoard(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
     menu = Menu(surface, WINDOW_WIDTH, WINDOW_HEIGHT, hud.maxHeight)
-    pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight)
+    pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight, metaData)
 
     while not metaData.gameOver:
 
@@ -51,14 +53,15 @@ def main():
         surface.fill((0,0,0))
         if metaData.gameName == 'menu':
             menu.draw()
+            hud.draw(metaData)
         elif metaData.gameName == 'pong':
-            pong.draw(mouseY)
+            pong.draw(mouseY, metaData)
+            sb.draw(metaData)
         elif metaData.gameName == 'breaker':
             pass
         elif metaData.gameName == 'drive':
             pass
 
-        hud.draw()
     pg.quit()
 
 

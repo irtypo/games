@@ -7,10 +7,11 @@ color_green = (0x32, 0xcd, 0x32)
 ballOnPaddle = False
 
 class Pong:
-    def __init__(self, surface, win_w, play_h):
+    def __init__(self, surface, win_w, play_h, md):
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = play_h
+        self.md = md
         self.playArea = pg.Rect(0, 0, self.windowWidth, self.windowHeight)
         self.balls = []
         self.players = []
@@ -21,7 +22,7 @@ class Pong:
         self.balls[0].spawn()
 
 
-    def draw(self, p1Y):
+    def draw(self, p1Y, md):
         self.players[0].y = p1Y
 
         # paddle boundrary collision check
@@ -33,7 +34,7 @@ class Pong:
                 self.balls[0].bounce('horizontal')
 
 
-        self.goalCheck()
+        self.goalCheck(md)
 
         # top bot collide
         if self.balls[0].y <= 0 or self.balls[0].y >= self.windowHeight:
@@ -47,12 +48,14 @@ class Pong:
         # green border
         pg.draw.rect(self.surface, (0, 0xff, 0), self.playArea, width=10)
 
-    def goalCheck(self):
+    def goalCheck(self, md):
         if self.balls[0].x <= 0:
+            md.p2Score += 1
             # self.players[1].score +=1
             self.balls[0].spawn()
         
         if self.balls[0].x >= self.windowWidth:
+            md.p1Score += 1
             # self.players[0].score +=1
             self.balls[0].spawn()
 

@@ -17,8 +17,11 @@ class HeadsUpDisplay:
         self.gameBasedConfig()
 
 
-    def draw(self):
+    def draw(self, md):
         # update when game changes
+        self.metaData = md
+        self.p1Score = self.metaData.p1Score
+        self.p2Score = self.metaData.p2Score
         if self.curGame != self.metaData.gameName:
             self.curGame = self.metaData.gameName
             self.gameBasedConfig()
@@ -50,7 +53,7 @@ class HeadsUpDisplay:
             self.maxHeight = self.windowHeight*.2
             self.score_h_padding = self.windowWidth * .05
             self.top = self.windowHeight-self.maxHeight+1
-            self.p1Score = 0
-            self.p2Score = 0
+            self.p1Score = self.metaData.p1Score
+            self.p2Score = self.metaData.p2Score
         
 
