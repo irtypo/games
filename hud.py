@@ -15,7 +15,8 @@ class HeadsUpDisplay:
         self.width = win_w
         self.curGame = 'menu'
         self.gameBasedConfig()
-
+        self.p1Score = self.metaData.p1Score
+        self.p2Score = self.metaData.p2Score
 
     def draw(self, md):
         # update when game changes
@@ -47,13 +48,9 @@ class HeadsUpDisplay:
             self.maxHeight = self.windowHeight*.2
             self.score_h_padding = self.windowWidth * .05
             self.top = self.windowHeight-self.maxHeight+1
-            self.p1Score = None
-            self.p2Score = None
         elif self.curGame == 'pong':
             self.maxHeight = self.windowHeight*.2
             self.score_h_padding = self.windowWidth * .05
             self.top = self.windowHeight-self.maxHeight+1
-            self.p1Score = self.metaData.p1Score
-            self.p2Score = self.metaData.p2Score
         
 
