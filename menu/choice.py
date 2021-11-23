@@ -22,7 +22,7 @@ class GameChoice:
         self.index = index
         self.left = self.padding + self.width * self.index * 1.5
         self.top = (win_h/2 - self.height)
-        self.rect = pg.Rect(self.left, self.top, self.width, self.height)
+        self.rect = pg.Rect(self.left+300, self.top, self.width, self.height)
         self.count()
 
     def draw(self):

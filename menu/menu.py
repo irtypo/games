@@ -1,11 +1,9 @@
-import pygame as pg
-from pong.scoreboard import ScoreBoard as hud
 from menu.choice import GameChoice
 
 gameBoxWidth = 200
 gameBoxHeight = 200
 gameBoxPadding = 75
-AVAILABLE_GAMES = ['pong', 'breaker', '3', '4']
+AVAILABLE_GAMES = ['pong', 'drive']
 
 class Menu:
     def __init__(self, surface, win_w, win_h, hud_h):

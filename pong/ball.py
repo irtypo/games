@@ -12,8 +12,6 @@ class Ball:
         self.directionX = 1
         self.directionY = 1
         self.speed = .7
-        self.rect = pg.Rect(self.x, self.y, self.width, self.height)
-        # pg.draw.circle(self.surface, self.color, (self.x, self.y), self.radius)
     
     def draw(self):
         if self.directionX > 0:
@@ -27,7 +25,6 @@ class Ball:
             self.y -= self.speed
 
         pg.draw.circle(self.surface, self.color, (self.x, self.y), self.width/2)
-        # pg.draw.rect(self.surface, self.color, self.rect)
 
     def spawn(self):
         self.x = 1280/2

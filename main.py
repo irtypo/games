@@ -1,7 +1,7 @@
 import pygame as pg
-from pygame import display
-from pong.pong import Pong
 from menu.menu import Menu
+from pong.pong import Pong
+from drive.drive import Drive
 from metadata import MetaData
 from hud import HeadsUpDisplay as HUD
 from pong.scoreboard import ScoreBoard
@@ -12,7 +12,7 @@ def main():
     WINDOW_WIDTH = 1280
     WINDOW_HEIGHT = 720 + (720 * .2)
     WINDOW_ICON = pg.image.load('common\src\\brain.png')
-    AVAILABLE_GAMES = ['menu', 'pong', 'breaker', 'drive', '4']
+    AVAILABLE_GAMES = ['menu', 'pong', 'drive']
 
     pg.init()
     metaData = MetaData()
@@ -27,6 +27,7 @@ def main():
     sb = ScoreBoard(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
     menu = Menu(surface, WINDOW_WIDTH, WINDOW_HEIGHT, hud.maxHeight)
     pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight, metaData)
+    drive = Drive(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight, metaData)
 
     while not metaData.gameOver:
 
@@ -47,6 +48,11 @@ def main():
                 if event.type == pg.MOUSEMOTION:
                     if event.pos[1] != None:
                         mouseY = event.pos[1]
+            elif metaData.gameName == 'drive':
+                if event.type == pg.TEXTINPUT:
+                    if event.text == ' ':
+                        print('jump')
+                        drive.car.jump()
 
         # drawing
         pg.display.update()
@@ -57,10 +63,11 @@ def main():
         elif metaData.gameName == 'pong':
             pong.draw(mouseY, metaData)
             sb.draw(metaData)
-        elif metaData.gameName == 'breaker':
-            pass
+        # elif metaData.gameName == 'breaker':
+            # pass
         elif metaData.gameName == 'drive':
-            pass
+            drive.draw(metaData)
+            hud.draw(metaData)
 
     pg.quit()
 

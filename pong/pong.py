@@ -51,12 +51,10 @@ class Pong:
     def goalCheck(self, md):
         if self.balls[0].x <= 0:
             md.p2Score += 1
-            # self.players[1].score +=1
             self.balls[0].spawn()
         
         if self.balls[0].x >= self.windowWidth:
             md.p1Score += 1
-            # self.players[0].score +=1
             self.balls[0].spawn()
 
 
