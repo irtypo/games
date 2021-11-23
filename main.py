@@ -24,6 +24,7 @@ def main():
     pg.display.set_icon(WINDOW_ICON)
     hud = HUD(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
     menu = Menu(surface, WINDOW_WIDTH, WINDOW_HEIGHT, hud.maxHeight)
+    pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight)
 
     while not metaData.gameOver:
 
@@ -51,7 +52,6 @@ def main():
         if metaData.gameName == 'menu':
             menu.draw()
         elif metaData.gameName == 'pong':
-            pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT-hud.maxHeight)
             pong.draw(mouseY)
         elif metaData.gameName == 'breaker':
             pass

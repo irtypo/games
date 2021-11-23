@@ -13,9 +13,13 @@ class Paddle:
         self.score = 0
         self.color = (255,255,255)
         index += 1
+        self.rect = pg.Rect(self.x, self.y, self.width, self.height)
+        # self.rect = 
 
     def draw(self):
         rect = pg.Rect(self.x, self.y, self.width, self.height)
+        self.rect = rect
+        
         # if event == None:
         pg.draw.rect(self.surface, self.color, rect)
         # elif event == 'goal':
