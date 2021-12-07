@@ -13,7 +13,7 @@ def main():
     WINDOW_WIDTH = 1280
     WINDOW_HEIGHT = 720 + (720 * .2)
     WINDOW_ICON = pg.image.load('common\src\\brain.png')
-    AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'pool']
+    AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'billards', '4']
 
     pg.init()
     metaData = MetaData()

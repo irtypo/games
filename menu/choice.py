@@ -21,16 +21,15 @@ class GameChoice:
         self.height = 100
         self.xOffset = self.columnWidth/8
         self.index = index
-        self.left = self.index * self.columnWidth + self.xOffset
+        self.left = ((self.index+1) * self.columnWidth) - self.columnWidth//2
         self.top = (win_h/2 - self.height)
         self.rect = pg.Rect(self.left, self.top, self.width, self.height)
         self.count()
 
 
     def draw(self):
-        self.left = self.index * self.columnWidth
         pg.draw.rect(self.surface, self.color, self.rect)
-        self.surface.blit(self.displayText, (self.left+self.width//2, self.top+10+(self.displayText.get_height()//2)))
+        self.surface.blit(self.displayText, (self.left+self.width//6, self.top+10+(self.displayText.get_height()//2)))
         
     def count(self):
         global index
