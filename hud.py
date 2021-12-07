@@ -3,7 +3,6 @@ import pygame as pg
 pg.font.init()
 COLOR = {'WHITE': (255,255,255), 'BLACK': (0,0,0)}
 textLarge = pg.font.SysFont(None, 80)
-textSmall = pg.font.SysFont(None, 24)
 
 
 class HeadsUpDisplay:

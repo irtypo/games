@@ -7,5 +7,6 @@ class MetaData:
         self.gameName = 'menu'
         self.displayText = 'who dis'
         self.gameOver = False
+        self.gameList = []
 
         
