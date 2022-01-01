@@ -1,7 +1,7 @@
 import pygame as pg
 from drive.car import Car
 from drive.dashboard import DashBoard
-LEVELS = ['moon', 'mountain']
+LEVELS = ['moon', 'mountains', 'space', 'plains', 'chill']
 
 class Drive:
     def __init__(self, surface, win_w, win_h, md):
@@ -14,7 +14,7 @@ class Drive:
         self.dash = DashBoard(surface, win_w, win_h, md)
         self.car_group = pg.sprite.Group()
         self.car_group.add(self.car)
-        self.background = pg.image.load(f'common/src/background/{LEVELS[0]}.png')
+        self.background = pg.image.load(f'common/src/background/{LEVELS[3]}.png')
         self.scroll = 0
 
     def draw(self):
