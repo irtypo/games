@@ -3,7 +3,6 @@ import random
 pg.font.init()
 
 index = 0
-COLORS = [(255,0,0), (0,255,0), (0,255,255), (255,0,255), (0,255 ,0), (30, 30, 30)]
 textSize = pg.font.SysFont(None, 60)
 
 
@@ -15,7 +14,7 @@ class GameChoice:
         self.windowHeight = win_h
         self.columnWidth = self.windowWidth//maxNum
         self.name = name
-        self.color = random.choice(COLORS)
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.displayText = textSize.render('{}'.format(self.name), True, (255,255,255))
         self.width = self.displayText.get_width() + (self.displayText.get_width()//2) 
         self.height = 100

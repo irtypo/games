@@ -5,6 +5,7 @@ from drive.dashboard import DashBoard
 from drive.hazard import Hazard
 LEVELS = ['moon', 'mountains', 'space', 'plains', 'chill']
 DEBUG_MODE = False
+HAZARD_NUMBER = 10
 
 class Drive:
     def __init__(self, surface, win_w, win_h):
@@ -20,7 +21,8 @@ class Drive:
         self.background = pg.image.load(f'common/src/background/{LEVELS[3]}.png')
         self.scrolledDist = 0
         self.hazards = []
-        for i in range(1, 2):
+        self.nextHazardIndex = 0
+        for i in range(1, HAZARD_NUMBER):
             height = random.randint(20, 300)
             haz = Hazard(self.surface, 700 * i, self.windowHeight-height, 50, height)
             self.hazards.append(haz)
@@ -54,13 +56,10 @@ class Drive:
             if self.car.rect.colliderect(self.hazards[i].rect):
                 self.car.speed = 0
 
-
-        # score check
-        for i in range(0, len(self.hazards)):
-            # print(self.hazards[i].x)
-            if self.hazards[i].x < self.car.x:
-                self.dash.scored(50)
-                # print('scored')
+        # scored
+        if self.car.x-(self.car.speed+1) < self.hazards[self.nextHazardIndex].x < self.car.x:
+            self.nextHazardIndex += 1
+            self.dash.scored(50)
 
     def toggleDebugMode(self):
         global DEBUG_MODE

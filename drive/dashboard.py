@@ -19,5 +19,5 @@ class DashBoard(HeadsUpDisplay):
 
 
 
-    def scored(self, points):
-        self.p1Score += points
+    def scored(self, score):
+        self.p1Score += score

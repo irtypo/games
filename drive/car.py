@@ -1,7 +1,8 @@
 import pygame as pg
+GRAVITY = 5
+SPAWN_HEIGHT = 100
 HOVER_COST = .25
 JUMP_COST = 30
-GRAVITY = 5
 
 class Car(pg.sprite.Sprite):
     def __init__(self, surface, x, y):
@@ -9,7 +10,7 @@ class Car(pg.sprite.Sprite):
         self.surface = surface
         self.groundLevel = y
         self.x = x
-        self.y = y-200
+        self.y = y-SPAWN_HEIGHT
         self.jumping = False
         self.falling = True
         self.flying = False

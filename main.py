@@ -46,12 +46,15 @@ def main():
         SURFACE.fill((0,0,0))
         if CURRENT_GAME.gameName == 'menu':
             pg.mouse.set_visible(True)
+            pg.display.set_caption("gams")
             GAME_LIST['menu'].draw()
 
         elif CURRENT_GAME.gameName == 'pong':
+            pg.display.set_caption("ping")
             GAME_LIST['pong'].draw(mouseY)
         
         elif CURRENT_GAME.gameName == 'drive':
+            pg.display.set_caption("drive")
             GAME_LIST['drive'].draw()
 
         
@@ -72,6 +75,7 @@ def pollInput(e):
     if CURRENT_GAME.gameName != 'menu':
         if e.type == pg.KEYDOWN:
             if e.key == pg.K_ESCAPE:
+                GAME_LIST['menu'].randColors()
                 CURRENT_GAME = GAME_LIST['menu']
 
     # ctrl + c
@@ -115,7 +119,6 @@ def pollInput(e):
         # release jump/fly
         if e.type == pg.MOUSEBUTTONUP or (e.type == pg.KEYUP and e.key == pg.K_SPACE):
             GAME_LIST['drive'].car.jumpStop()
-            # drive.car.flyStop()
 
         # fuel
         if e.type == pg.KEYDOWN and e.key == pg.K_f:

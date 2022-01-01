@@ -1,5 +1,6 @@
 from menu.choice import GameChoice
 from hud import HeadsUpDisplay as HUD
+import random
 
 gameBoxWidth = 200
 gameBoxHeight = 200
@@ -41,10 +42,10 @@ class Menu:
         res = []
         for gameName in gameList:
             res.append(GameChoice(self.surface, self.windowWidth, self.windowHeight, gameName, num))
-
         return res
 
-
-
+    def randColors(self):
+        for g in self.gamesChoices:
+            g.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
 
