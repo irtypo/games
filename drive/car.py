@@ -37,8 +37,10 @@ class Car(pg.sprite.Sprite):
             self.counter = 0
             self.index = (self.index + 1) % self.idleImgCount
         self.image = self.images[self.index]
-
-
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y-self.rect.height
+        self.rect.height = self.rect.height *.8
 
     def draw(self):
         # ground collision and conditional gravity
@@ -103,7 +105,7 @@ class Car(pg.sprite.Sprite):
             self.jumping = True
             self.hovering = True
 
-    def refuel(self, amount):
+    def addFuel(self, amount):
         if self.fuel <= self.maxFuel:
             self.fuel += amount
         if self.fuel > self.maxFuel:

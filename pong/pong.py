@@ -9,6 +9,7 @@ ballOnPaddle = False
 
 class Pong:
     def __init__(self, surface, win_w, win_h, md):
+        self.gameName = 'pong'
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = win_h - (win_h * .2)

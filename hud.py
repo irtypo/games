@@ -29,8 +29,15 @@ class HeadsUpDisplay:
         pg.draw.line(self.surface, (255,255,255), (0,self.windowHeight-self.maxHeight), (self.windowWidth, self.windowHeight-self.maxHeight))
         
         # draw text
-        displayText = self.textLarge.render('{}'.format(self.metaData.gameName), True, self.COLOR['WHITE'])
-        self.surface.blit(displayText, (self.windowWidth/2-displayText.get_width()/2, self.top + self.maxHeight*.1))
+        self.titleText = self.textLarge.render('{}'.format(self.metaData.gameName), True, self.COLOR['WHITE'])
+        
+        titleTextX = self.windowWidth/2-self.titleText.get_width()/2
+        titleTextY = self.top + self.maxHeight*.1
+        self.surface.blit(self.titleText, (titleTextX, titleTextY))
+        
+        self.titleRect = self.titleText.get_rect()
+        self.titleRect.x = titleTextX
+        self.titleRect.y = titleTextY
         
         # draw score
         if self.metaData.gameName != 'menu':

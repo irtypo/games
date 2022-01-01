@@ -7,6 +7,7 @@ gameBoxPadding = 75
 
 class Menu:
     def __init__(self, surface, win_w, win_h, md):
+        self.gameName = 'menu'
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = win_h

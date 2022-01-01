@@ -8,8 +8,13 @@ class Hazard(pg.sprite.Sprite):
         self.y = y
         self.width = w
         self.height = h
+        self.color = (255, 0 ,0)
         self.rect = pg.Rect(self.x, self.y, self.width, self.height)
 
-    def draw(self):
-        pg.draw.rect(self.surface, self.color, self.rect)
 
+    def scroll(self, speed):
+        self.x -= speed
+        self.rect.x = self.x
+
+    def draw(self):
+            pg.draw.rect(self.surface, self.color, self.rect)
