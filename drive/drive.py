@@ -10,10 +10,14 @@ class Drive:
         self.md = md
         self.car = Car(self.surface, 200, win_h - (win_h * .2))
         self.dash = DashBoard(surface, win_w, win_h, md)
+        self.car_group = pg.sprite.Group()
+        self.car_group.add(self.car)
 
 
     def draw(self):
         self.car.draw()
-        self.dash.draw(self.md, self.car.fuel)
+        self.car_group.update()
+
+        self.dash.draw(self.md, int(self.car.fuel))
 
 

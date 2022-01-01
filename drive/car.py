@@ -1,40 +1,47 @@
-from os import truncate
 import pygame as pg
-index = 0
 
-class Car:
+class Car(pg.sprite.Sprite):
     def __init__(self, surface, x, y):
-        global index
-        self.i = index
+        pg.sprite.Sprite.__init__(self)
         self.surface = surface
         self.groundLevel = y
         self.x = x
         self.y = y-200
         self.jumping = False
-        self.falling = False
-        self.jumpForce = 100
-        self.airTime = 0
+        self.falling = True
+        self.flying = False
         self.velX = 1
         self.velY = 1
-        # self.width = 100
-        # self.height = 75
         self.score = 0
         self.fuel = 1000
         self.maxFuel = 2000
         self.grounded = False
         self.hovering = False
-        # self.color = (255,255,255)
-        # index += 1
-        # self.rect = pg.Rect(self.x, self.y, self.width, self.height)
-        self.jumpHeight = 20
-        self.img = pg.image.load('common\src\car.png')
-        self.img = pg.transform.scale(self.img, (175, 88))
+        self.images = []
+        self.index = 0
+        self.counter = 0
+        self.idleImgCount = 4
+        for i in range(0, self.idleImgCount):
+            img = pg.image.load(f'common/src/car/idle_{i}.png')
+            img = pg.transform.scale(img, (175, 88))
+            self.images.append(img)
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
+        # self.rect.center = [self.x, self.y]
+        
+    def update(self):
+        self.counter += 1
+        idleCooldown = 120
+        if self.counter > idleCooldown:
+            self.counter = 0
+            self.index = (self.index + 1) % self.idleImgCount
+        self.image = self.images[self.index]
+
 
 
     def draw(self):
-
         # ground collision and conditional gravity
-        if not self.jumping and self.y < self.groundLevel:
+        if not (self.jumping or self.flying) and self.y < self.groundLevel:
             self.falling = True
             self.grounded = False
             self.hovering = False
@@ -49,36 +56,51 @@ class Car:
         # jumping
         if self.jumping and not self.falling:
             hangTime = pg.time.get_ticks()
-            maxAir = 500
+            maxAir = 400
             self.y -= 1
 
             if hangTime > self.startJump + maxAir:
                 self.jumping = False
+                self.hovering = True
             
         # hovering
         if self.hovering:
-            self.fuel -= 1
-            if self.fuel <= 0:
-                self.fuel = 0
-                self.jumpStop()
+            self.fuel -= .25
 
-        self.surface.blit(self.img, (self.x, self.y-100))
+        if self.flying:
+            self.y -= .25
+            if self.y < self.rect.height/2:
+                self.y = self.rect.height/2
+            self.fuel -= 1
+
+        if self.fuel <= 0:
+            self.fuel = 0
+            self.jumpStop()
+
+        self.surface.blit(self.image, (self.x, self.y-100))
 
 
 
     def jumpStart(self):
-        if self.fuel > 0:
-            self.jumping = True
-            self.startJump = pg.time.get_ticks()
+        self.jumping = True
+        self.startJump = pg.time.get_ticks()
 
     def jumpStop(self):
         if not self.falling:
             pg.time.wait(90)
         self.jumping = False
+        self.flying = False
 
     def hover(self):
-        self.jumping = True
-        self.hovering = True
+        if self.fuel > 0:
+            self.jumping = True
+            self.hovering = True
+
+    def fly(self):
+        if self.fuel > 0:
+            self.flying = True
+            self.jumping = True
+            self.hovering = True
 
     def refuel(self, amount):
         if self.fuel <= self.maxFuel:

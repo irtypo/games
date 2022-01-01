@@ -56,19 +56,24 @@ def main():
 
 def driveControls(drive, e):
     # press jump
-    if e.type == pg.MOUSEBUTTONDOWN or (e.type == pg.KEYDOWN and e.key == pg.K_SPACE):
-        
+    if (e.type == pg.MOUSEBUTTONDOWN and e.button == 1) or (e.type == pg.KEYDOWN and e.key == pg.K_SPACE):
         if not drive.car.grounded:
             drive.car.hover()
-            # drive.car.hovering = True
         else:
             drive.car.jumpStart()
-            # drive.car.hovering = False
+    
+    # fly
+    elif (e.type == pg.MOUSEBUTTONDOWN and e.button == 3) or (e.type == pg.KEYDOWN and e.key == pg.K_x):
+        drive.car.fly()
+        drive.car.jumpStart()
 
-    # release jump
+
+    # release jump/fly
     if e.type == pg.MOUSEBUTTONUP or (e.type == pg.KEYUP and e.key == pg.K_SPACE):
         drive.car.jumpStop()
+        # drive.car.flyStop()
 
+    # refuel
     if e.type == pg.KEYDOWN and e.key == pg.K_r:
         drive.car.refuel(1000)
 
