@@ -1,4 +1,6 @@
 import pygame as pg
+HOVER_COST = .25
+GRAVITY = 5
 
 class Car(pg.sprite.Sprite):
     def __init__(self, surface, x, y):
@@ -11,7 +13,6 @@ class Car(pg.sprite.Sprite):
         self.falling = True
         self.flying = False
         self.velX = 1
-        self.velY = 1
         self.score = 0
         self.fuel = 1000
         self.maxFuel = 2000
@@ -31,7 +32,7 @@ class Car(pg.sprite.Sprite):
         
     def update(self):
         self.counter += 1
-        idleCooldown = 120
+        idleCooldown = 10
         if self.counter > idleCooldown:
             self.counter = 0
             self.index = (self.index + 1) % self.idleImgCount
@@ -45,7 +46,7 @@ class Car(pg.sprite.Sprite):
             self.falling = True
             self.grounded = False
             self.hovering = False
-            self.y += self.velY
+            self.y += GRAVITY
 
         # driving or falling
         if self.y >= self.groundLevel:
@@ -56,8 +57,8 @@ class Car(pg.sprite.Sprite):
         # jumping
         if self.jumping and not self.falling:
             hangTime = pg.time.get_ticks()
-            maxAir = 400
-            self.y -= 1
+            maxAir = 1200
+            self.y -= GRAVITY
 
             if hangTime > self.startJump + maxAir:
                 self.jumping = False
@@ -65,13 +66,13 @@ class Car(pg.sprite.Sprite):
             
         # hovering
         if self.hovering:
-            self.fuel -= .25
+            self.fuel -= HOVER_COST
 
         if self.flying:
             self.y -= .25
             if self.y < self.rect.height/2:
                 self.y = self.rect.height/2
-            self.fuel -= 1
+            self.fuel -= HOVER_COST*4
 
         if self.fuel <= 0:
             self.fuel = 0

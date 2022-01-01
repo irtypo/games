@@ -13,6 +13,7 @@ AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'billards', '4']
 metaData = MetaData()
 mouseY = 10
 
+
 def main():
 
     pg.init()
@@ -28,7 +29,11 @@ def main():
     pong = Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
     drive = Drive(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
 
+    clock = pg.time.Clock()
+    FPS = 60
+
     while not metaData.gameOver:
+        clock.tick(FPS)
 
         # events
         for event in pg.event.get():

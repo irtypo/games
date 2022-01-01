@@ -11,7 +11,7 @@ class Ball:
         self.height = r*2
         self.directionX = 1
         self.directionY = 1
-        self.speed = .7
+        self.speed = 8
     
     def draw(self):
         if self.directionX > 0:
