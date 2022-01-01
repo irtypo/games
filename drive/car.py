@@ -12,7 +12,7 @@ class Car(pg.sprite.Sprite):
         self.jumping = False
         self.falling = True
         self.flying = False
-        self.velX = 1
+        self.speed = 3
         self.score = 0
         self.fuel = 1000
         self.maxFuel = 2000
@@ -69,7 +69,7 @@ class Car(pg.sprite.Sprite):
             self.fuel -= HOVER_COST
 
         if self.flying:
-            self.y -= .25
+            self.y -= HOVER_COST*3
             if self.y < self.rect.height/2:
                 self.y = self.rect.height/2
             self.fuel -= HOVER_COST*4

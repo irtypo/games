@@ -7,7 +7,7 @@ from metadata import MetaData
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720 + (720 * .2)
-WINDOW_ICON = pg.image.load('common\src\\brain.png')
+WINDOW_ICON = pg.image.load('common/src/brain.png')
 AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'billards', '4']
 
 metaData = MetaData()
