@@ -1,3 +1,4 @@
+import random
 import pygame as pg
 from drive.car import Car
 from drive.dashboard import DashBoard
@@ -6,20 +7,23 @@ LEVELS = ['moon', 'mountains', 'space', 'plains', 'chill']
 DEBUG_MODE = False
 
 class Drive:
-    def __init__(self, surface, win_w, win_h, md):
+    def __init__(self, surface, win_w, win_h):
         global LEVELS
         self.gameName = 'drive'
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = win_h - (win_h * .2)
-        self.md = md
         self.car = Car(self.surface, 200, win_h - (win_h * .2))
-        self.dash = DashBoard(surface, win_w, win_h, md)
+        self.dash = DashBoard(surface, win_w, win_h, 'drive')
         self.car_group = pg.sprite.Group()
         self.car_group.add(self.car)
         self.background = pg.image.load(f'common/src/background/{LEVELS[3]}.png')
         self.scrolledDist = 0
-        self.hazard = Hazard(self.surface, win_w + 50, self.windowHeight-100, 50, 100)
+        self.hazards = []
+        for i in range(1, 2):
+            height = random.randint(20, 300)
+            haz = Hazard(self.surface, 700 * i, self.windowHeight-height, 50, height)
+            self.hazards.append(haz)
 
     def draw(self):
         # draw background
@@ -29,7 +33,7 @@ class Drive:
             self.scrolledDist = 0
 
         # draw hud
-        self.dash.draw(self.md, int(self.car.fuel))
+        self.dash.draw(self.car)
 
         # draw hitboxes
         if DEBUG_MODE:
@@ -40,18 +44,25 @@ class Drive:
         self.car_group.update()
 
         # draw hazard
-        if self.hazard.rect.x > 0-self.hazard.rect.width:
-            self.hazard.scroll(self.car.speed)
-        self.hazard.draw()
+        for i in range(0, len(self.hazards)):
+            if self.hazards[i].rect.x > 0-self.hazards[i].rect.width:
+                self.hazards[i].scroll(self.car.speed)
+            self.hazards[i].draw()
 
-        # collision
-        if self.car.rect.colliderect(self.hazard.rect):
-            self.car.speed = 0
+        # collision check
+        for i in range(0, len(self.hazards)):
+            if self.car.rect.colliderect(self.hazards[i].rect):
+                self.car.speed = 0
 
 
-        # print(self.dash.titleText.get_rect())
-        
+        # score check
+        for i in range(0, len(self.hazards)):
+            # print(self.hazards[i].x)
+            if self.hazards[i].x < self.car.x:
+                self.dash.scored(50)
+                # print('scored')
 
     def toggleDebugMode(self):
         global DEBUG_MODE
         DEBUG_MODE = True if DEBUG_MODE == False else False
+        

@@ -6,25 +6,24 @@ gameBoxHeight = 200
 gameBoxPadding = 75
 
 class Menu:
-    def __init__(self, surface, win_w, win_h, md):
+    def __init__(self, surface, win_w, win_h, games):
         self.gameName = 'menu'
         self.surface = surface
         self.windowWidth = win_w
         self.windowHeight = win_h
         self.hudHeight = self.windowHeight * (win_h * 2)
         self.playHeight = self.windowHeight - (self.windowHeight * (win_h * 2))
-        self.md = md
-        self.gamesAvailable = self.md.gameList
+        self.gamesAvailable = games
         self.gamesAvailable.remove('menu')
         self.gamesChoices = self.wheresTheMelee(self.gamesAvailable)
-        self.hud = HUD(surface, win_w, win_h, md)
+        self.hud = HUD(surface, win_w, win_h, 'menu')
         
     def draw(self):
         # self.gamesChoices = self.wheresTheMelee(self.gamesAvailable)
         for g in self.gamesChoices:
             g.draw()
         
-        self.hud.draw(self.md)
+        self.hud.draw()
 
     def click(self, event):
         self.clickX = event.pos[0]

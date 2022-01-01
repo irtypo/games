@@ -1,5 +1,6 @@
 import pygame as pg
 HOVER_COST = .25
+JUMP_COST = 30
 GRAVITY = 5
 
 class Car(pg.sprite.Sprite):
@@ -85,6 +86,9 @@ class Car(pg.sprite.Sprite):
 
 
     def jumpStart(self):
+        if self.grounded:
+            self.fuel -= JUMP_COST
+    
         self.jumping = True
         self.startJump = pg.time.get_ticks()
 
@@ -110,3 +114,6 @@ class Car(pg.sprite.Sprite):
             self.fuel += amount
         if self.fuel > self.maxFuel:
             self.fuel = self.maxFuel
+
+    def restart(self):
+        pass

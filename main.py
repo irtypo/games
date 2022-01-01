@@ -1,9 +1,8 @@
 import pygame as pg
-from pygame.constants import GL_BLUE_SIZE, K_ESCAPE
+from pygame import surface
 from menu.menu import Menu
 from pong.pong import Pong
 from drive.drive import Drive
-from metadata import MetaData
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720 + (720 * .2)
@@ -11,33 +10,31 @@ WINDOW_ICON = pg.image.load('common/src/brain.png')
 AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'billards', '4']
 GAME_LIST = {}
 CURRENT_GAME = None
+SURFACE = None
 FPS = 60
-metaData = MetaData()
 mouseY = 10
+GAME_OVER = False
 
 
 def main():
     global GAME_LIST
     global CURRENT_GAME
+    global SURFACE
 
     pg.init()
     pg.time.Clock()
-    metaData.gameList = AVAILABLE_GAMES
-    metaData.gameName = metaData.gameList[0]
-    metaData.displayText = metaData.gameName
-
-    surface = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+    clock = pg.time.Clock()
+    SURFACE = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
     pg.display.set_icon(WINDOW_ICON)
+
     GAME_LIST = {
-        'menu': Menu(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData),
-        'pong': Pong(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData),
-        'drive': Drive(surface, WINDOW_WIDTH, WINDOW_HEIGHT, metaData)
+        'menu': Menu(SURFACE, WINDOW_WIDTH, WINDOW_HEIGHT, AVAILABLE_GAMES),
+        'pong': Pong(SURFACE, WINDOW_WIDTH, WINDOW_HEIGHT),
+        'drive': Drive(SURFACE, WINDOW_WIDTH, WINDOW_HEIGHT)
     }
     CURRENT_GAME = GAME_LIST['menu']
 
-    clock = pg.time.Clock()
-
-    while not metaData.gameOver:
+    while not GAME_OVER:
         clock.tick(FPS)
 
         # event
@@ -46,13 +43,15 @@ def main():
 
         # draw
         pg.display.update()
-        surface.fill((0,0,0))
-        if metaData.gameName == 'menu':
+        SURFACE.fill((0,0,0))
+        if CURRENT_GAME.gameName == 'menu':
             pg.mouse.set_visible(True)
             GAME_LIST['menu'].draw()
-        elif metaData.gameName == 'pong':
-            GAME_LIST['pong'].draw(mouseY, metaData)
-        elif metaData.gameName == 'drive':
+
+        elif CURRENT_GAME.gameName == 'pong':
+            GAME_LIST['pong'].draw(mouseY)
+        
+        elif CURRENT_GAME.gameName == 'drive':
             GAME_LIST['drive'].draw()
 
         
@@ -62,34 +61,35 @@ def main():
 def pollInput(e):
     global GAME_LIST
     global CURRENT_GAME
+    global GAME_OVER
 
     ## GLOBAL CONTROLS ##
     # close window
     if e.type == pg.QUIT:
-        metaData.gameOver = True
+        GAME_OVER = True
         
     # go back to the menu
-    if metaData.gameName != 'menu':
+    if CURRENT_GAME.gameName != 'menu':
         if e.type == pg.KEYDOWN:
-            if e.key == K_ESCAPE:
-                metaData.gameName = 'menu'
+            if e.key == pg.K_ESCAPE:
+                CURRENT_GAME = GAME_LIST['menu']
 
     # ctrl + c
     if e.type == pg.KEYDOWN:
         if e.mod and pg.KMOD_LCTRL and e.key == pg.K_c:
-            metaData.gameOver = True
+            GAME_OVER = True
 
     # select game
     if e.type == pg.MOUSEBUTTONUP:
-        if metaData.gameName == 'menu' and GAME_LIST['menu'].click(e) != None:
-            metaData.gameName = GAME_LIST['menu'].click(e)
-
-
-
+        clicked = GAME_LIST['menu'].click(e)
+        if CURRENT_GAME.gameName == 'menu' and clicked:
+            try:
+                CURRENT_GAME = GAME_LIST[clicked]
+            except:
+                pass
 
     ## PONG CONTROLS ##
-    if metaData.gameName == 'pong':
-        CURRENT_GAME = GAME_LIST['pong']
+    if CURRENT_GAME.gameName == 'pong':
         global mouseY
         if e.type == pg.MOUSEMOTION:
             if e.pos[1] != None:
@@ -97,10 +97,7 @@ def pollInput(e):
 
 
     ## DRIVE CONTROLS ##
-    elif metaData.gameName == 'drive':
-        CURRENT_GAME = GAME_LIST['drive']
-
-       
+    elif CURRENT_GAME.gameName == 'drive':
 
         # press jump
         if (e.type == pg.MOUSEBUTTONDOWN and e.button == 1) or (e.type == pg.KEYDOWN and e.key == pg.K_SPACE):
@@ -123,6 +120,11 @@ def pollInput(e):
         # fuel
         if e.type == pg.KEYDOWN and e.key == pg.K_f:
             GAME_LIST['drive'].car.addFuel(1000)
+
+        # restart
+        if e.type == pg.KEYDOWN and e.key == pg.K_r:
+            GAME_LIST['drive'] = Drive(SURFACE, WINDOW_WIDTH, WINDOW_HEIGHT)
+
 
         # click on HUD
         if (e.type == pg.MOUSEBUTTONDOWN and e.button == 2) and e.pos[1] > GAME_LIST['drive'].dash.top:
