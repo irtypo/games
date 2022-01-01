@@ -16,6 +16,7 @@ def main():
     AVAILABLE_GAMES = ['menu', 'pong', 'drive', 'billards', '4']
 
     pg.init()
+    pg.time.Clock()
     metaData = MetaData()
     metaData.gameList = AVAILABLE_GAMES
     metaData.gameName = metaData.gameList[0]
@@ -35,6 +36,10 @@ def main():
 
         # events
         for event in pg.event.get():
+            # if event == "down":
+            # print(event)
+
+            
             # close window
             if event.type == pg.QUIT:
                 metaData.gameOver = True
@@ -42,29 +47,33 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.mod == 4160 and event.key == 99:
                     metaData.gameOver = True
-            
-            elif metaData.gameName == 'menu':
-                if event.type == pg.MOUSEBUTTONUP and menu.click(event) != None:
+
+                # go back to the menu
+                if metaData.gameName != 'menu':
+                    if event.type == pg.KEYDOWN:
+                        if event.key == K_ESCAPE:
+                            metaData.gameName = 'menu'
+
+                if metaData.gameName == 'drive':
+                    if event.key == pg.K_SPACE:
+                        drive.car.jumpStart()
+                        
+
+            elif event.type == pg.MOUSEBUTTONUP:
+                if metaData.gameName == 'menu' and menu.click(event) != None:
                     metaData.gameName = menu.click(event)
-            elif metaData.gameName == 'pong':
-                if event.type == pg.MOUSEMOTION:
+
+
+            elif event.type == pg.MOUSEMOTION:
+                if metaData.gameName == 'pong':
                     if event.pos[1] != None:
                         mouseY = event.pos[1]
-            elif metaData.gameName == 'drive':
-                if event.type == pg.TEXTINPUT:
-                    if event.text == ' ':
-                        print('jump')
-                        drive.car.jump()
 
 
-
-
-            # go back to the menu
-            if metaData.gameName != 'menu':
-                if event.type == pg.KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        metaData.gameName = 'menu'
-
+            elif event.type == pg.KEYUP:
+                if metaData.gameName == 'drive':
+                    if event.key == pg.K_SPACE:
+                        drive.car.jumpStop()
         # drawing
         pg.display.update()
         surface.fill((0,0,0))
@@ -73,7 +82,11 @@ def main():
             menu.draw()
             hud.draw(metaData)
         elif metaData.gameName == 'pong':
-            pg.mouse.set_visible(False)
+            if mouseY > WINDOW_HEIGHT-hud.maxHeight:
+                pg.mouse.set_visible(True)
+            else:
+                pg.mouse.set_visible(False)
+
             pong.draw(mouseY, metaData)
             sb.draw(metaData)
         # elif metaData.gameName == 'breaker':

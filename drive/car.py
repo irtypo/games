@@ -6,15 +6,19 @@ class Car:
         global index
         self.i = index
         self.surface = surface
+        self.groundLevel = y
         self.x = x
-        self.y = y
+        self.y = y-200
         self.jumping = False
         self.falling = False
         self.jumpForce = 100
         self.airTime = 0
+        self.velX = 1
+        self.velY = 1
         # self.width = 100
         # self.height = 75
         self.score = 0
+        self.fuel = 100
         # self.color = (255,255,255)
         # index += 1
         # self.rect = pg.Rect(self.x, self.y, self.width, self.height)
@@ -24,28 +28,39 @@ class Car:
 
 
     def draw(self):
-        if self.jumping == True:
-            self.y -= 1
-            self.airTime += 1
-        if self.airTime >= self.jumpForce:
-            self.jumping = False
+
+        # ground collision
+        if not self.jumping and self.y < self.groundLevel:
             self.falling = True
+            self.y += self.velY
 
-        # if self.falling == True:
-        #     self.y -= 1
-        #     self.airTime += 1
+        # grounded check
+        if self.y >= self.groundLevel:
+            self.falling = False
 
-        # if self.y
-        # self.rect = pg.Rect(self.x, self.y-200, self.width, self.height)
-        # pg.draw.rect(self.surface, self.color, self.rect)
+        # jumping
+        if not self.falling and self.jumping:
+            hangTime = pg.time.get_ticks()
+            maxAir = 500
+            self.y -= 1
+
+            if hangTime > self.startJump + maxAir:
+                self.jumping = False
+            
+
+
         self.surface.blit(self.img, (self.x, self.y-100))
-        # self.hover()
-        # print(self.y)
 
-    def jump(self):
-        self.jumping = True
-        # for i in range(0,self.jumpHeight):
-            # self.y -= i
+
+
+    def jumpStart(self):
+        if self.fuel > 0:
+            self.jumping = True
+            self.startJump = pg.time.get_ticks()
+
+    def jumpStop(self):
+        pg.time.wait(90)
+        self.jumping = False
 
     def hover(self):
         for i in range(0, 10):
