@@ -2,15 +2,16 @@ import pygame as pg
 from pong.ball import Ball
 from pong.paddle import Paddle
 from pong.cpu import CPU
+from pong.scoreboard import ScoreBoard
 
 color_green = (0x32, 0xcd, 0x32)
 ballOnPaddle = False
 
 class Pong:
-    def __init__(self, surface, win_w, play_h, md):
+    def __init__(self, surface, win_w, win_h, md):
         self.surface = surface
         self.windowWidth = win_w
-        self.windowHeight = play_h
+        self.windowHeight = win_h - (win_h * .2)
         self.md = md
         self.playArea = pg.Rect(0, 0, self.windowWidth, self.windowHeight)
         self.balls = []
@@ -20,10 +21,16 @@ class Pong:
         self.players.append(Paddle(self.surface, 60, 10))
         self.players.append(Paddle(self.surface, self.windowWidth-(60+10), 10))
         self.balls[0].spawn()
-
+        self.scoreBoard = ScoreBoard(surface, win_w, win_h, md)
 
     def draw(self, p1Y, md):
         self.players[0].y = p1Y
+
+        # invis mouse
+        if self.players[0].y > self.windowHeight:
+            pg.mouse.set_visible(True)
+        else:
+            pg.mouse.set_visible(False)
 
         # paddle boundrary collision check
         for p in self.players:
@@ -47,6 +54,9 @@ class Pong:
 
         # green border
         pg.draw.rect(self.surface, (0, 0xff, 0), self.playArea, width=10)
+
+        # draw hud
+        self.scoreBoard.draw(self.md)
 
     def goalCheck(self, md):
         if self.balls[0].x <= 0:

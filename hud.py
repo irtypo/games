@@ -1,8 +1,6 @@
 import pygame as pg
 
 pg.font.init()
-COLOR = {'WHITE': (255,255,255), 'BLACK': (0,0,0)}
-textLarge = pg.font.SysFont(None, 80)
 
 
 class HeadsUpDisplay:
@@ -17,6 +15,8 @@ class HeadsUpDisplay:
         self.top = self.windowHeight-self.maxHeight+1
         self.p1Score = self.metaData.p1Score
         self.p2Score = self.metaData.p2Score
+        self.textLarge = pg.font.SysFont(None, 80)
+        self.COLOR = {'WHITE': (255,255,255), 'BLACK': (0,0,0)}
 
     def draw(self, md):
         # update when game changes
@@ -29,15 +29,15 @@ class HeadsUpDisplay:
         pg.draw.line(self.surface, (255,255,255), (0,self.windowHeight-self.maxHeight), (self.windowWidth, self.windowHeight-self.maxHeight))
         
         # draw text
-        displayText = textLarge.render('{}'.format(self.metaData.gameName), True, COLOR['WHITE'])
+        displayText = self.textLarge.render('{}'.format(self.metaData.gameName), True, self.COLOR['WHITE'])
         self.surface.blit(displayText, (self.windowWidth/2-displayText.get_width()/2, self.top + self.maxHeight*.1))
         
         # draw score
         if self.metaData.gameName != 'menu':
-            p1ScoreText = textLarge.render('{}'.format(self.p1Score), True, COLOR['WHITE'])
+            p1ScoreText = self.textLarge.render('{}'.format(self.p1Score), True, self.COLOR['WHITE'])
             self.surface.blit(p1ScoreText, (self.score_h_padding, self.top + self.maxHeight*.1))
             if self.metaData.gameName != 'drive':
-                p2ScoreText = textLarge.render('{}'.format(self.p2Score), True, COLOR['WHITE'])
+                p2ScoreText = self.textLarge.render('{}'.format(self.p2Score), True, self.COLOR['WHITE'])
                 self.surface.blit(p2ScoreText, (self.windowWidth - self.score_h_padding - p2ScoreText.get_width(), self.top + self.maxHeight*.1))
 
 

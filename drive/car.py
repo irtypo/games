@@ -1,3 +1,4 @@
+from os import truncate
 import pygame as pg
 index = 0
 
@@ -18,7 +19,10 @@ class Car:
         # self.width = 100
         # self.height = 75
         self.score = 0
-        self.fuel = 100
+        self.fuel = 1000
+        self.maxFuel = 2000
+        self.grounded = False
+        self.hovering = False
         # self.color = (255,255,255)
         # index += 1
         # self.rect = pg.Rect(self.x, self.y, self.width, self.height)
@@ -29,17 +33,21 @@ class Car:
 
     def draw(self):
 
-        # ground collision
+        # ground collision and conditional gravity
         if not self.jumping and self.y < self.groundLevel:
             self.falling = True
+            self.grounded = False
+            self.hovering = False
             self.y += self.velY
 
-        # grounded check
+        # driving or falling
         if self.y >= self.groundLevel:
             self.falling = False
+            self.grounded = True
+            self.hovering = False
 
         # jumping
-        if not self.falling and self.jumping:
+        if self.jumping and not self.falling:
             hangTime = pg.time.get_ticks()
             maxAir = 500
             self.y -= 1
@@ -47,7 +55,12 @@ class Car:
             if hangTime > self.startJump + maxAir:
                 self.jumping = False
             
-
+        # hovering
+        if self.hovering:
+            self.fuel -= 1
+            if self.fuel <= 0:
+                self.fuel = 0
+                self.jumpStop()
 
         self.surface.blit(self.img, (self.x, self.y-100))
 
@@ -59,12 +72,16 @@ class Car:
             self.startJump = pg.time.get_ticks()
 
     def jumpStop(self):
-        pg.time.wait(90)
+        if not self.falling:
+            pg.time.wait(90)
         self.jumping = False
 
     def hover(self):
-        for i in range(0, 10):
-            self.y += i
+        self.jumping = True
+        self.hovering = True
 
-        for i in range(0, 10):
-            self.y -= i
+    def refuel(self, amount):
+        if self.fuel <= self.maxFuel:
+            self.fuel += amount
+        if self.fuel > self.maxFuel:
+            self.fuel = self.maxFuel
