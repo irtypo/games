@@ -11,7 +11,7 @@ class Hazard(pg.sprite.Sprite):
         self.height = h
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.rect = pg.Rect(self.x, self.y, self.width, self.height)
-
+        self.lastHazard = False
 
     def scroll(self, speed):
         self.x -= speed
@@ -24,4 +24,8 @@ class Hazard(pg.sprite.Sprite):
         
         # hazard border
         for i in range(4):
-            pg.draw.rect(self.surface, (0,0,0), (self.x-i, self.y-i, self.width, self.height), 1)
+            pg.draw.rect(self.surface, (0,0,0), (self.x-i, self.y+i, self.width, self.height), 1)
+
+
+    def setColor(self, c):
+        self.color = c
